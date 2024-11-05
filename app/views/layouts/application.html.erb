@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Sistema Autenticacao" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <%= stylesheet_link_tag 'rails_toastify', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'rails_toastify', 'data-turbo-track': 'reload' %>
+
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-slate-200">
+    <div class="flex h-screen overflow-hidden">
+      <main class="container mx-auto p-10 flex flex-col items-center justify-center min-h-screen">
+        <%= yield %>
+        <%= rails_toastify_container %>
+        <%= rails_toastify_script %>
+
+        <% if notice %>
+          <script>
+            RailsToastify.show('<%= notice %>',
+              { theme: '<%= RailsToastify.configuration.notice_theme %>',
+                type: '<%= RailsToastify.configuration.notice_type %>',
+                animation: '<%= RailsToastify.configuration.notice_animation %>',
+                duration: <%= RailsToastify.configuration.notice_duration %>
+              })
+          </script>
+        <% end %>
+
+        <% if alert %>
+          <script>
+            RailsToastify.show('<%= alert %>',
+              { theme: '<%= RailsToastify.configuration.alert_theme %>',
+                type: '<%= RailsToastify.configuration.alert_type %>',
+                animation: '<%= RailsToastify.configuration.alert_animation %>',
+                duration: <%= RailsToastify.configuration.alert_duration %>
+              })
+          </script>
+        <% end %>
+      </main>
+    </div>
+  </body>
+</html>

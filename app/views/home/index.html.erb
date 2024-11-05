@@ -1,0 +1,37 @@
+<div class="text-center mt-8">
+  <p id="countdown" class="text-xl font-semibold mt-4">Sessão expira em: 60 segundos</p>
+  <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "block px-4 py-2 text-white bg-blue-400" %>
+</div>
+
+<script>
+  let timeLeft = 60;
+  const countdownElement = document.getElementById('countdown');
+
+  const countdown = setInterval(() => {
+    timeLeft -= 1;
+    countdownElement.textContent = `Sessão expira em: ${timeLeft} segundos`;
+
+    if (timeLeft <= 0) {
+      clearInterval(countdown);
+      fetch("<%= destroy_user_session_path %>", {
+        method: "DELETE",
+        headers: {
+          "X-CSRF-Token": "<%= form_authenticity_token %>",
+          "Content-Type": "application/json"
+        },
+      })
+      .then(response => {
+        if (response.ok) {
+          RailsToastify.show('Para continuar, efetue login ou registre-se.',
+              { theme: '<%= RailsToastify.configuration.notice_theme %>',
+                type: '<%= RailsToastify.configuration.notice_type %>',
+                animation: '<%= RailsToastify.configuration.notice_animation %>',
+                duration: <%= RailsToastify.configuration.notice_duration %>
+              })
+          window.location.href = "/";
+        }
+      })
+      .catch(error => console.error("Erro ao sair:", error));
+    }
+  }, 1000);
+</script>
